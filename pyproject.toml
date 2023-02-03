@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "hi-tech"
+version = "0.1.0"
+description = ""
+authors = ["VladmimirShtefan <shtefanvladimir14@gmail.com>"]
+readme = "README.md"
+packages = [{include = "hi_tech"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+networkx = "^3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
