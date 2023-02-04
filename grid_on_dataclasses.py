@@ -1,9 +1,11 @@
 from networkx import Graph
 
+from dataclasses import Node, Coordinate, NeighboursNodes
+
 
 class Field:
     def __init__(self, x: int, y: int):
-        self.start_point: tuple[int, int] = x, y
+        self.start_point: Coordinate = Coordinate(x=x, y=y)
         self.max_sum = 25
         self.g = Graph()
 
@@ -11,50 +13,54 @@ class Field:
         """
         Для установки начальной вершины (узла)
         """
-        target = *self.start_point, self.sum_digits_in_coordinates(self.start_point)
+        target: Node = Node(coordinate=self.start_point, weight=self.sum_digits_in_coordinates(self.start_point))
         self.g.add_node(target)
 
-    def get_neighbours_node(self, node: tuple[int, int, int]) -> dict:
+    def get_neighbours_node(self, node: Node) -> NeighboursNodes:
         """
         Для формирования соседних доступных узлов
         :param node: текущий узел
         :return: соседние узлы
         """
-        x, y, weight = node
-        up = (x - 1, y,  weight - 1) if x != 0 else None
-        down = (x + 1, y,  weight + 1)
-        left = (x, y - 1, weight - 1) if y != 0 else None
-        right = (x, y + 1, weight + 1)
-        return {
-            'up': self.point_is_reachable(up),
-            'down': self.point_is_reachable(down),
-            'left': self.point_is_reachable(left),
-            'right': self.point_is_reachable(right),
-        }
+        neighbours = NeighboursNodes(neighbours=[])
 
-    def sum_digits_in_coordinates(self, coordinates: tuple[int, int]) -> int:
+        up_coordinates = Coordinate(x=node.coordinate.x - 1, y=node.coordinate.y)
+        neighbours.neighbours.append(Node(coordinate=up_coordinates, weight=node.weight - 1)) \
+            if node.coordinate.x != 0 and self.point_is_reachable(up_coordinates) else None
+
+        down_coordinates = Coordinate(x=node.coordinate.x + 1, y=node.coordinate.y)
+        neighbours.neighbours.append(Node(coordinate=down_coordinates, weight=node.weight + 1)) \
+            if self.point_is_reachable(down_coordinates) else None
+
+        left_coordinates = Coordinate(x=node.coordinate.x, y=node.coordinate.y - 1)
+        neighbours.neighbours.append(Node(coordinate=left_coordinates, weight=node.weight - 1)) \
+            if node.coordinate.y != 0 and self.point_is_reachable(left_coordinates) else None
+
+        right_coordinates = Coordinate(x=node.coordinate.x, y=node.coordinate.y + 1)
+        neighbours.neighbours.append(Node(coordinate=right_coordinates, weight=node.weight + 1)) \
+            if self.point_is_reachable(right_coordinates) else None
+
+        return NeighboursNodes(neighbours=neighbours.neighbours)
+
+    def sum_digits_in_coordinates(self, coordinates: Coordinate) -> int:
         """
         Для подсчета суммы цифр в координатах
         :param coordinates: координаты
         :return: сумма цифр в координатах
         """
-        return self.sum_digits(''.join(map(str, coordinates)))
+        return self.sum_digits(''.join(map(str, (coordinates.x, coordinates.y))))
 
     @staticmethod
     def sum_digits(number: str) -> int:
         return sum([int(num) for num in number])
 
-    def point_is_reachable(self, coordinates: tuple[int, int, int] | None) -> tuple[int, int, int] | None:
+    def point_is_reachable(self, coordinates: Coordinate) -> bool:
         """
         Проверка на доступность координаты в соответствии с max_sum
         :param coordinates: координаты
         :return: координаты или при недоступности None
         """
-        if coordinates:
-            x, y, weigth = coordinates
-            if self.sum_digits_in_coordinates((x, y)) <= self.max_sum:
-                return coordinates
-        return None
+        return self.sum_digits_in_coordinates(coordinates) <= self.max_sum
 
     def search_nodes(self):
         """
@@ -69,7 +75,7 @@ class Field:
             if nodes_count == offset:
                 break
             for node in actual_nodes[offset:]:
-                for cell in self.get_neighbours_node(node).values():
+                for cell in self.get_neighbours_node(node).neighbours:
                     if cell:
                         self.g.add_node(cell)
                         self.g.add_edge(cell, node)
@@ -80,50 +86,3 @@ class Field:
 if __name__ == '__main__':
     field = Field(1000, 1000)
     print(field.search_nodes())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

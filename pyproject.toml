@@ -9,6 +9,7 @@ packages = [{include = "hi_tech"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 networkx = "^3.0"
+pydantic = "^1.10.4"
 
 
 [build-system]
