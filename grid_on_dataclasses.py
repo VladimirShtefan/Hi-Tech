@@ -25,20 +25,20 @@ class Field:
         neighbours = NeighboursNodes(neighbours=[])
 
         up_coordinates = Coordinate(x=node.coordinate.x - 1, y=node.coordinate.y)
-        neighbours.neighbours.append(Node(coordinate=up_coordinates, weight=node.weight - 1)) \
-            if node.coordinate.x != 0 and self.point_is_reachable(up_coordinates) else None
+        if node.coordinate.x != 0 and self.point_is_reachable(up_coordinates):
+            neighbours.neighbours.append(Node(coordinate=up_coordinates, weight=node.weight - 1))
 
         down_coordinates = Coordinate(x=node.coordinate.x + 1, y=node.coordinate.y)
-        neighbours.neighbours.append(Node(coordinate=down_coordinates, weight=node.weight + 1)) \
-            if self.point_is_reachable(down_coordinates) else None
+        if self.point_is_reachable(down_coordinates):
+            neighbours.neighbours.append(Node(coordinate=down_coordinates, weight=node.weight + 1))
 
         left_coordinates = Coordinate(x=node.coordinate.x, y=node.coordinate.y - 1)
-        neighbours.neighbours.append(Node(coordinate=left_coordinates, weight=node.weight - 1)) \
-            if node.coordinate.y != 0 and self.point_is_reachable(left_coordinates) else None
+        if node.coordinate.y != 0 and self.point_is_reachable(left_coordinates):
+            neighbours.neighbours.append(Node(coordinate=left_coordinates, weight=node.weight - 1))
 
         right_coordinates = Coordinate(x=node.coordinate.x, y=node.coordinate.y + 1)
-        neighbours.neighbours.append(Node(coordinate=right_coordinates, weight=node.weight + 1)) \
-            if self.point_is_reachable(right_coordinates) else None
+        if self.point_is_reachable(right_coordinates):
+            neighbours.neighbours.append(Node(coordinate=right_coordinates, weight=node.weight + 1))
 
         return NeighboursNodes(neighbours=neighbours.neighbours)
 
