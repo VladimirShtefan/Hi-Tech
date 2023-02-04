@@ -14,15 +14,5 @@ class Node:
     weight: int
 
 
-class Edge(BaseModel):
-    start_point: Node
-    end_point: Node
-
-
-class FieldGraph(BaseModel):
-    field_nodes: tuple[Node]
-    field_edges: tuple[Edge]
-
-
 class NeighboursNodes(BaseModel):
     neighbours: list[Node, ...] | None

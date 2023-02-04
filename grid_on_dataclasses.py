@@ -1,6 +1,6 @@
 from networkx import Graph
 
-from dataclasses import Node, Coordinate, NeighboursNodes
+from dataclass import Node, Coordinate, NeighboursNodes
 
 
 class Field:
