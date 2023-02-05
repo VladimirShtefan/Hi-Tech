@@ -1,10 +1,11 @@
 from networkx import Graph
 
+from config import START_POINT, MAX_SUM
+
 
 class Field:
     def __init__(self, x: int, y: int):
         self.start_point: tuple[int, int] = x, y
-        self.max_sum = 25
         self.g = Graph()
 
     def create_start_node(self) -> None:
@@ -44,7 +45,7 @@ class Field:
     def sum_digits(number: str) -> int:
         return sum([int(num) for num in number])
 
-    def point_is_reachable(self, coordinates: tuple[int, int, int] | None) -> tuple[int, int, int] | None:
+    def point_is_reachable(self, coordinates: tuple[int, int, int] | None) -> tuple | None:
         """
         Проверка на доступность координаты в соответствии с max_sum
         :param coordinates: координаты
@@ -52,11 +53,11 @@ class Field:
         """
         if coordinates:
             x, y, weigth = coordinates
-            if self.sum_digits_in_coordinates((x, y)) <= self.max_sum:
+            if self.sum_digits_in_coordinates((x, y)) <= MAX_SUM:
                 return coordinates
         return None
 
-    def search_nodes(self):
+    def search_nodes(self) -> int:
         """
         Поиск всех доступных вершин с учетом доступности координат при прохождении через них
         :return: количество доступных связанных координат
@@ -78,52 +79,5 @@ class Field:
 
 
 if __name__ == '__main__':
-    field = Field(1000, 1000)
+    field = Field(*START_POINT)
     print(field.search_nodes())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

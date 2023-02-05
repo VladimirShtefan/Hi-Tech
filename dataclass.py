@@ -14,7 +14,7 @@ class Node:
     coordinate: Coordinate
 
     @property
-    def neighbours(self):
+    def neighbours(self) -> tuple:
         neighbours = []
         coordinate = Coordinate(x=self.coordinate.x - 1, y=self.coordinate.y)
         if self.coordinate.x != 0 and self.point_is_reachable(coordinate):
@@ -35,8 +35,8 @@ class Node:
         return tuple(neighbours)
 
     @staticmethod
-    def get_weight(coordinate: Coordinate):
+    def get_weight(coordinate: Coordinate) -> int:
         return sum([int(num) for num in ''.join(map(str, (coordinate.x, coordinate.y)))])
 
-    def point_is_reachable(self, coordinate):
+    def point_is_reachable(self, coordinate) -> bool:
         return self.get_weight(coordinate) <= MAX_SUM

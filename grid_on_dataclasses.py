@@ -16,7 +16,7 @@ class Field:
         """
         self.g.add_node(Node(coordinate=self.start_point))
 
-    def search_nodes(self):
+    def search_nodes(self) -> int:
         """
         Поиск всех доступных вершин с учетом доступности координат при прохождении через них
         :return: количество доступных связанных координат
